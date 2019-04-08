@@ -1,3 +1,4 @@
+var sleep = require('sleep');
 const net = require('net');
 const server = net.createServer((c) => {
   // 'connection' listener
@@ -30,6 +31,13 @@ const server = net.createServer((c) => {
 	  } else {
 		  resp = resp + ",AN:         .";
 	  }
+
+        let site = request.match(/SI:(\d+),/);
+        if(site != null) {
+		  console.log((new Date()).toUTCString() + ' : Site: ' + site[1]);
+        }
+    
+    sleep.sleep(5);
 	  //c.write('I001ITT,000,IR:EB618984DE2A464B90CB6313B0DB7191,AN:039140001.');
 	  //resp = '';
 	  c.write(resp + "\n");
@@ -37,8 +45,14 @@ const server = net.createServer((c) => {
 });
 server.on('error', (err) => {
   console.log((new Date()).toUTCString() + ' : ' + err);
-  throw err;
+  // throw err;
 });
+
+//this is same as net.createServer() and passing a callback function
+//server.on('connection', function(sock) {
+// console.log('Connected', + sock.remoteAddress + ':' + sock.remotePort);
+// });
+
 server.listen(8484, () => {
   console.log((new Date()).toUTCString() + ' : server bound');
 });
